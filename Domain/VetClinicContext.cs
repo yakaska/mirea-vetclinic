@@ -7,8 +7,8 @@ public class VetClinicContext : DbContext
 {
     public DbSet<Visit> Visits { get; set; }
     public DbSet<Hostess> Hostesses { get; set; }
-    public DbSet<Owner> Owners { get; set; }
-    public DbSet<Pet> Pets { get; set; }
+    public DbSet<Owner?> Owners { get; set; }
+    public DbSet<Pet?> Pets { get; set; }
     public DbSet<Procedure> Procedures { get; set; }
     public DbSet<Specialty> Specialties { get; set; }
     public DbSet<Specie> Species { get; set; }

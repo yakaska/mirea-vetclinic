@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using mirea_vetclinic.Domain;
+using mirea_vetclinic.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,10 @@ builder.Services.AddDbContext<VetClinicContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("mirea-vetclinic"));
     options.UseSnakeCaseNamingConvention();
 });
+builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
+
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
