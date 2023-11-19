@@ -5,11 +5,11 @@ namespace mirea_vetclinic.Domain.Services;
 public interface IOwnerRepository
 {
     // CRUD Operations for Owner
-    Task<List<Owner>> GetAllOwnersAsync();
-    Task<Owner?> GetOwnerByIdAsync(int id);
-    Task<Owner> CreateOwnerAsync(Owner owner);
-    Task<Owner> UpdateOwnerAsync(Owner updatedOwner);
-    Task<bool> DeleteOwnerAsync(int id);         
+    Task<List<Owner>> GetAllAsync();
+    Task<Owner?> GetByIdAsync(int id);
+    Task<Owner> CreateAsync(Owner owner);
+    Task<Owner> UpdateAsync(Owner updatedOwner);
+    Task<bool> DeleteAsync(int id);         
     
     // CRUD Operations for Pet
     Task<List<Pet>> GetAllPetsByOwnerIdAsync(int ownerId);

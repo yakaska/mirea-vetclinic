@@ -19,7 +19,7 @@ public class OwnerController : Controller
     [Route("")]
     public async Task<List<Owner>> GetAllOwners()
     {
-        return await _ownerRepository.GetAllOwnersAsync();
+        return await _ownerRepository.GetAllAsync();
     }
 
     [HttpGet]
@@ -28,7 +28,7 @@ public class OwnerController : Controller
     [Route("{ownerId:int}")]
     public async Task<IActionResult> FindOwner(int ownerId)
     {
-        var owner = await _ownerRepository.GetOwnerByIdAsync(ownerId);
+        var owner = await _ownerRepository.GetByIdAsync(ownerId);
         return owner == null ? new NotFoundResult() : new JsonResult(owner);
     }
 }

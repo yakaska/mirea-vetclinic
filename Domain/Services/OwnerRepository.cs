@@ -12,7 +12,7 @@ public class OwnerRepository : IOwnerRepository
         _vetClinicContext = vetClinicContext;
     }
 
-    public async Task<List<Owner>> GetAllOwnersAsync()
+    public async Task<List<Owner>> GetAllAsync()
     {
         return await _vetClinicContext.Owners
             .Include(owner => owner.Pets)
@@ -21,7 +21,7 @@ public class OwnerRepository : IOwnerRepository
             .ToListAsync();
     }
 
-    public async Task<Owner?> GetOwnerByIdAsync(int id)
+    public async Task<Owner?> GetByIdAsync(int id)
     {
         return await _vetClinicContext.Owners
             .Where(owner => owner.Id == id)
@@ -31,21 +31,21 @@ public class OwnerRepository : IOwnerRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<Owner> CreateOwnerAsync(Owner owner)
+    public async Task<Owner> CreateAsync(Owner owner)
     {
         await _vetClinicContext.Owners.AddAsync(owner);
         await _vetClinicContext.SaveChangesAsync();
         return owner;
     }
 
-    public async Task<Owner> UpdateOwnerAsync(Owner updatedOwner)
+    public async Task<Owner> UpdateAsync(Owner updatedOwner)
     {
         _vetClinicContext.Owners.Entry(updatedOwner).State = EntityState.Modified;
         await _vetClinicContext.SaveChangesAsync();
         return updatedOwner;
     }
 
-    public async Task<bool> DeleteOwnerAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         var owner = await _vetClinicContext.Owners.FindAsync(id);
 

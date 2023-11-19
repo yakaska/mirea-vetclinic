@@ -1,12 +1,61 @@
 ﻿@page
- 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>METANIT.COM</title>
-    <meta charset="utf-8" />
-</head>
-<body>
-    <h2>Time: @DateTime.Now.ToShortTimeString()</h2>
-</body>
-</html>
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@using mirea_vetclinic.Domain.Models
+@using mirea_vetclinic.Domain.Services
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<h2>Owner Details</h2>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+        <th>Pet Details</th>
+    </tr>`
+    </thead>
+    <tbody>
+    @foreach (var owner in Model.Owners)
+    {
+        <tr>
+            <td>@owner.FirstName @owner.LastName @owner.Patronymic</td>
+            <td>@owner.Email</td>
+            <td>@owner.PhoneNumber</td>
+            <td>@owner.Address</td>
+            <td>
+                @foreach (var pet in owner.Pets)
+                {
+                    <p><strong>@pet.Nickname</strong> (@pet.Age years) - Status: @pet.Status</p>
+                    <p>Description: @pet.Description</p>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@functions
+{
+    public class IndexModel : PageModel
+    {
+        private readonly IOwnerRepository _ownerRepository;
+
+        public IndexModel(IOwnerRepository ownerRepository)
+        {
+            _ownerRepository = ownerRepository;
+            Owners = new List<Owner>();
+        }
+
+        public List<Owner> Owners { get; set; }
+
+        public async Task OnGet()
+        {
+            Owners = await _ownerRepository.GetAllAsync();
+        }
+    }
+}
