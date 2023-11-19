@@ -12,24 +12,24 @@ public class OwnerRepository : IOwnerRepository
         _vetClinicContext = vetClinicContext;
     }
 
-    public async Task<List<Owner?>> GetAllOwnersAsync()
+    public async Task<List<Owner>> GetAllOwnersAsync()
     {
-        return await _vetClinicContext.Owners.ToListAsync();
+        return await _vetClinicContext.Owners.Include(owner => owner.Pets).ToListAsync();
     }
 
     public async Task<Owner?> GetOwnerByIdAsync(int id)
     {
-        return await _vetClinicContext.Owners.Where(owner => owner != null && owner.Id == id).FirstOrDefaultAsync();
+        return await _vetClinicContext.Owners.Where(owner => owner.Id == id).FirstOrDefaultAsync();
     }
 
-    public async Task<Owner?> CreateOwnerAsync(Owner? owner)
+    public async Task<Owner> CreateOwnerAsync(Owner owner)
     {
         await _vetClinicContext.Owners.AddAsync(owner);
         await _vetClinicContext.SaveChangesAsync();
         return owner;
     }
 
-    public async Task<Owner?> UpdateOwnerAsync(Owner? updatedOwner)
+    public async Task<Owner> UpdateOwnerAsync(Owner updatedOwner)
     {
         _vetClinicContext.Owners.Entry(updatedOwner).State = EntityState.Modified;
         await _vetClinicContext.SaveChangesAsync();
@@ -42,7 +42,7 @@ public class OwnerRepository : IOwnerRepository
 
         if (owner == null)
         {
-            throw new KeyNotFoundException($"Owner with id: {id} was not found in the database!");
+            return false;
         }
 
         _vetClinicContext.Owners.Remove(owner);
@@ -50,26 +50,26 @@ public class OwnerRepository : IOwnerRepository
         return true;
     }
 
-    public async Task<List<Pet?>> GetAllPetsByOwnerIdAsync(int ownerId)
+    public async Task<List<Pet>> GetAllPetsByOwnerIdAsync(int ownerId)
     {
         return await _vetClinicContext.Pets
-            .Where(pet => pet != null && pet.OwnerId == ownerId)
+            .Where(pet => pet.OwnerId == ownerId)
             .ToListAsync();
     }
 
     public async Task<Pet?> GetPetByIdAsync(int petId)
     {
-        return await _vetClinicContext.Pets.Where(pet => pet != null && pet.Id == petId).FirstOrDefaultAsync();
+        return await _vetClinicContext.Pets.Where(pet => pet.Id == petId).FirstOrDefaultAsync();
     }
 
-    public async Task<Pet?> CreatePetAsync(Pet? pet)
+    public async Task<Pet> CreatePetAsync(Pet pet)
     {
         await _vetClinicContext.Pets.AddAsync(pet);
         await _vetClinicContext.SaveChangesAsync();
         return pet;
     }
 
-    public async Task<Pet?> UpdatePetAsync(Pet? updatedPet)
+    public async Task<Pet> UpdatePetAsync(Pet updatedPet)
     {
         _vetClinicContext.Pets.Entry(updatedPet).State = EntityState.Modified;
         await _vetClinicContext.SaveChangesAsync();
@@ -79,10 +79,9 @@ public class OwnerRepository : IOwnerRepository
     public async Task<bool> DeletePetAsync(int petId)
     {
         var pet = await _vetClinicContext.Pets.FindAsync(petId);
-
         if (pet == null)
         {
-            throw new KeyNotFoundException($"Pet with id: {petId} was not found in the database!");
+            return false;
         }
 
         _vetClinicContext.Pets.Remove(pet);

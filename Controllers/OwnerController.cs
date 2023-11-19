@@ -17,7 +17,7 @@ public class OwnerController : Controller
 
     [HttpGet]
     [Route("")]
-    public async Task<List<Owner?>> GetAllOwners()
+    public async Task<List<Owner>> GetAllOwners()
     {
         return await _ownerRepository.GetAllOwnersAsync();
     }
