@@ -14,12 +14,21 @@ public class OwnerRepository : IOwnerRepository
 
     public async Task<List<Owner>> GetAllOwnersAsync()
     {
-        return await _vetClinicContext.Owners.Include(owner => owner.Pets).ToListAsync();
+        return await _vetClinicContext.Owners
+            .Include(owner => owner.Pets)
+            .ThenInclude(pet => pet.Visits)
+            .ThenInclude(visit => visit.Procedures)
+            .ToListAsync();
     }
 
     public async Task<Owner?> GetOwnerByIdAsync(int id)
     {
-        return await _vetClinicContext.Owners.Where(owner => owner.Id == id).FirstOrDefaultAsync();
+        return await _vetClinicContext.Owners
+            .Where(owner => owner.Id == id)
+            .Include(owner => owner.Pets)
+            .ThenInclude(pet => pet.Visits)
+            .ThenInclude(visit => visit.Procedures)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<Owner> CreateOwnerAsync(Owner owner)
@@ -53,7 +62,7 @@ public class OwnerRepository : IOwnerRepository
     public async Task<List<Pet>> GetAllPetsByOwnerIdAsync(int ownerId)
     {
         return await _vetClinicContext.Pets
-            .Where(pet => pet.OwnerId == ownerId)
+            .Where(pet => pet.Owner.Id == ownerId)
             .ToListAsync();
     }
 
@@ -91,7 +100,7 @@ public class OwnerRepository : IOwnerRepository
 
     public async Task<List<Visit>> GetOwnerVisitsAsync(int ownerId)
     {
-        return await _vetClinicContext.Visits.Where(visit => visit.OwnerId == ownerId).ToListAsync();
+        throw new NotImplementedException();
     }
 
     public async Task<Visit> CreateVisitAsync(Visit visit)
@@ -103,7 +112,7 @@ public class OwnerRepository : IOwnerRepository
 
     public async Task<List<Visit>> GetVisitsByPetIdAsync(int petId)
     {
-        return await _vetClinicContext.Visits.Where(visit => visit.PetId == petId).ToListAsync();
+        throw new NotImplementedException();
     }
 
     public Task<bool> CancelVisitAsync(int visitId)

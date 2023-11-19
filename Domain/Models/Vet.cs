@@ -10,5 +10,5 @@ public class Vet
     
     public IList<Visit> Visits { get; set; }
 
-    public IList<VetSpecialties> VetSpecialties { get; set; }
+    public IList<Specialty> Specialties { get; set; }
 }

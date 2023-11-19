@@ -10,5 +10,5 @@ public class Owner
     public string PhoneNumber { get; set; }
     public string Address { get; set; }
 
-    public virtual List<Pet> Pets { get; set; }
+    public virtual IList<Pet> Pets { get; set; }
 }
